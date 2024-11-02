@@ -165,7 +165,72 @@ void editfrontpll(person_linked_list *list){//Редактирование че�
     while (search != NULL) {
         if (!strcmp(search->name, tmp->name) && !strcmp(search->surname, tmp->surname))
         {
-            printf("nashel");
+            bool workonf=1; int cmdonf;
+            while(workonf){
+                printf("\nРедактировать фамилию-1,\n Редактировать имя-2,\n Редактировать отчество-3,\n Редактировать место работы-4,\n Редактировать должность-5,\n Редактировать номер мобильного телефона-6,\n Редактировать email-7,\n Редактировать ссылку на соц.сеть-8,\n Выйти-9\n: ");
+                scanf("%d", &cmdonf);
+                switch(cmdonf)
+                {
+                    case 1: 
+                        printf("\nEnter surname: ");
+                        fgets (clean, 2 ,stdin);
+                        fgets(surnameof, TWENTY_SIZE, stdin);
+                        if (!checkonvoidstr(surnameof))
+                        {
+                            printf("Поля фамилия и имя не могут быть пустыми! Возврат в меню\n");
+                            break;
+                        }
+                        strcpy(search->surname, surnameof);
+                        break;
+                    case 2: 
+                        printf("\nEnter name: ");
+                        fgets (clean, 2 ,stdin);
+                        fgets(nameonf, TWENTY_SIZE, stdin);
+                        if (!checkonvoidstr(nameonf))
+                        {
+                            printf("Поля фамилия и имя не могут быть пустыми! Возврат в меню\n");
+                            break;
+                        }
+                        strcpy(search->name, nameonf);
+                        break;
+                    case 3: 
+                        printf("\nВведите отчество: ");
+                        fgets (clean, 2 ,stdin);
+                        fgets(search->lastname, TWENTY_SIZE, stdin);
+                        break;
+                    case 4: 
+                        printf("\nВведите место работы: ");
+                        fgets (clean, 2 ,stdin);
+                        fgets(search->infwork.placewp, FIFTY_SIZE, stdin);
+                        break;
+                    case 5: 
+                        printf("\nВведите должность: ");
+                        fgets (clean, 2 ,stdin);
+                        fgets(search->infwork.postp, THIRTY_SIZE, stdin);
+                        break;
+                    case 6: 
+                        printf("\nВведите номер телефона: ");
+                        fgets (clean, 2 ,stdin);
+                        fgets(search->infconn.mobphonep, 12, stdin);
+                        break;
+                    case 7: 
+                        printf("\nВведите email: ");
+                        fgets (clean, 2 ,stdin);
+                        fgets( search->infconn.addressemailp, THIRTY_SIZE, stdin);
+                        break;
+                    case 8: 
+                        printf("\nВведите ссылку на соц.сеть: ");
+                        fgets (clean, 2 ,stdin);
+                        fgets( search->infconn.linksnp, 200, stdin);
+                        break;
+                    case 9:
+                        workonf=0;
+                        break;
+                    default: 
+                        printf("\nКоманда не найдена \n");
+                        break;
+                }
+            }
         }
         search = search->next;
     }
@@ -211,7 +276,8 @@ void deletefrontpll(person_linked_list *list){//Удаление через на
             {
                 search->prev->next = search->next;
             }
-            //free(search);
+            free(search);
+            list->size--;
             break;
         }
         search = search->next;
