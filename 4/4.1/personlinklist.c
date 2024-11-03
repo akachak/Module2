@@ -29,9 +29,73 @@ void deletepll(person_linked_list **list){//Удаление списка
     (*list) = NULL;
 }
 
-void pushfrontpll(person_linked_list *list){//Добавление через начало списка
-    person_node *tmp = (person_node*) malloc(sizeof(person_node));
-    if (tmp == NULL) {
+int sortfrontpll(person_linked_list *list){//Сортировка через начало по алфавиту
+    person_node *curr = (person_node*) malloc(sizeof(person_node));
+    if (curr == NULL) {
+        exit(1);
+    }
+    person_node *swap = (person_node*) malloc(sizeof(person_node));
+    if (swap == NULL) {
+        exit(1);
+    }
+    person_node *swap_two = (person_node*) malloc(sizeof(person_node));
+    if (swap == NULL) {
+        exit(1);
+    }
+    person_node *last = NULL;
+    int swapped;
+    do {
+        swapped = 0;
+        curr = list->head;
+
+        while (curr->next != last) {
+            if ((toupper(curr->surname[0]) > toupper(curr->next->surname[0]))) {
+                if(curr->next == list->tail)
+                {
+                    swap = list->tail->prev;
+                    list->tail->prev->next = NULL;
+                    list->tail->next = list->head;
+                    list->tail->prev = NULL;
+                    list->head->prev = list->tail;
+                    list->head = list->tail;
+                    list->tail = swap;
+                    return 1;
+                }
+                swap->next = curr->next->next;
+                swap->prev = curr->next;
+                if (curr != list->head)
+                {
+                    curr->prev->next = curr->next;
+                }
+                else
+                {
+                    list->head = curr->next;
+                }
+                if (curr->next->next != NULL)
+                {
+                    curr->next->next->prev = curr;
+                }
+                else
+                {
+                    list->tail = curr;
+                }
+                curr->next->prev = curr->prev;
+                
+                curr->next->next = curr;
+                curr->prev = swap->prev;
+                curr->next = swap->next;
+                swapped = 1;
+            }
+            curr = curr->next;
+        }
+        last = curr;
+    } while (swapped);
+    return 0;
+}
+
+void pushfrontpll(person_linked_list *list){//Добавление через начало списка по алфавиту
+    person_node *newnode = (person_node*) malloc(sizeof(person_node));
+    if (newnode == NULL) {
         exit(1);
     }
 
@@ -52,74 +116,75 @@ void pushfrontpll(person_linked_list *list){//Добавление через н
         printf("The surname and name fields cannot be empty! Return to the menu\n");
         return;
     }
-    strcpy(tmp->name, nameonf);
-    strcpy(tmp->surname, surnameof);
+    strcpy(newnode->name, nameonf);
+    strcpy(newnode->surname, surnameof);
 
     printf("Enter midname or skip(enter): ");
-    fgets(tmp->lastname, TWENTY_SIZE, stdin);
+    fgets(newnode->lastname, TWENTY_SIZE, stdin);
     
     printf("Enter place of work or skip(enter): ");
-    fgets(tmp->infwork.placewp, FIFTY_SIZE, stdin);
+    fgets(newnode->infwork.placewp, FIFTY_SIZE, stdin);
     
     printf("Enter post or skip(enter): ");
-    fgets(tmp->infwork.postp, THIRTY_SIZE, stdin);
+    fgets(newnode->infwork.postp, THIRTY_SIZE, stdin);
     
     printf("Enter mobile phone in format 89********* or skip(enter): ");
-    fgets(tmp->infconn.mobphonep, 12, stdin);
+    fgets(newnode->infconn.mobphonep, 12, stdin);
     
     printf("Enter email or skip(enter): ");
-    fgets( tmp->infconn.addressemailp, THIRTY_SIZE, stdin);
+    fgets( newnode->infconn.addressemailp, THIRTY_SIZE, stdin);
     
     printf("Enter link on social network or skip(enter): ");
-    fgets( tmp->infconn.linksnp, 200, stdin);
+    fgets( newnode->infconn.linksnp, 200, stdin);
 
     
-    person_node *swap = (person_node*) malloc(sizeof(person_node));
-    if (swap == NULL) {
-        exit(1);
-    }
+    person_node *tmp = list->head;
 
-    tmp->next = list->head;
-    tmp->prev = NULL;
-
-    if (list->head) {
-        list->head->prev = tmp;
-    }
-    list->head = tmp;
- 
-    if (list->tail == NULL) {
-        list->tail = tmp;
+    if (list->size == 0) {
+        list->head = newnode;
+        list->tail = newnode;
+        list->size++;
+        return;
     }
 
     while(true)
     {
-        if( list->size != 0 && tmp->next != NULL && (toupper(tmp->next->surname[0]) < toupper(tmp->surname[0])))
+        if( tmp->next != NULL && (toupper(tmp->surname[0]) < toupper(newnode->surname[0])))
         {
-            swap->next = tmp->next->next;
-
-            tmp->next->next = tmp;
-            tmp->next->prev = tmp->prev;
-
-            tmp->prev = tmp->next;
-            tmp->next = swap->next;
-            
-            if(swap->next == NULL)
-            {
-                list->tail = tmp;
-            }
-            if (tmp->prev->prev == NULL)
-            {
-                list->head = tmp->prev;
-            }
-
-            swap->next = NULL;
+            tmp = tmp->next;
         }
-        else{break;}
+        else if (tmp->next == NULL && (toupper(tmp->surname[0]) < toupper(newnode->surname[0])))
+        {
+            tmp->next = newnode;
+            newnode->next = NULL;
+            newnode->prev = tmp;
+            list->tail = newnode;
+            break;
+        }
+        else
+        {
+            if (list->head == tmp)
+            {
+                list->head = newnode;
+                newnode->prev = tmp->prev;
+                newnode->next = tmp;
+                tmp->prev = newnode;
+            }
+            else
+            {
+                newnode->prev = tmp->prev;
+                newnode->next = tmp;
+                tmp->prev->next = newnode;
+                tmp->prev = newnode;
+            }
+            
+            break;
+        }
     }
     list->size++;
 }
 
-void printpll(person_linked_list *list){//Принт с начала списка
+void printfrontpll(person_linked_list *list){//Принт с начала списка
     person_node *tmp = list->head;
     printf("Forward List: ");
     while (tmp != NULL) {
@@ -131,6 +196,21 @@ void printpll(person_linked_list *list){//Принт с начала списк�
         printf("Email: %s", tmp->infconn.addressemailp);
         printf("Link on sn: %s", tmp->infconn.linksnp);
         tmp = tmp->next;
+    }
+}
+
+void printbackpll(person_linked_list *list){//Принт с конца списка
+    person_node *tmp = list->tail;
+    printf("Forward List: ");
+    while (tmp != NULL) {
+        printf("\n");
+        printf("Full name:\n S: %s N: %s L: %s", tmp->surname, tmp->name, tmp->lastname);
+        printf("Place of work: %s", tmp->infwork.placewp);
+        printf("Post: %s", tmp->infwork.postp);
+        printf("Mobile phone: %s", tmp->infconn.mobphonep);
+        printf("Email: %s", tmp->infconn.addressemailp);
+        printf("Link on sn: %s", tmp->infconn.linksnp);
+        tmp = tmp->prev;
     }
 }
 
@@ -167,7 +247,7 @@ void editfrontpll(person_linked_list *list){//Редактирование че�
         {
             bool workonf=1; int cmdonf;
             while(workonf){
-                printf("\nРедактировать фамилию-1,\n Редактировать имя-2,\n Редактировать отчество-3,\n Редактировать место работы-4,\n Редактировать должность-5,\n Редактировать номер мобильного телефона-6,\n Редактировать email-7,\n Редактировать ссылку на соц.сеть-8,\n Выйти-9\n: ");
+                printf("\nEdit surname-1,\n Edit name-2,\n Edit midname-3,\n Edit place of work-4,\n Edit post-5,\n Edit mobile phone number-6,\n Edit email-7,\n Edit link on sn-8,\n Exit-9\n: ");
                 scanf("%d", &cmdonf);
                 switch(cmdonf)
                 {
@@ -177,10 +257,14 @@ void editfrontpll(person_linked_list *list){//Редактирование че�
                         fgets(surnameof, TWENTY_SIZE, stdin);
                         if (!checkonvoidstr(surnameof))
                         {
-                            printf("Поля фамилия и имя не могут быть пустыми! Возврат в меню\n");
+                            printf("The surname and name fields cannot be empty! Return to the menu\n");
                             break;
                         }
                         strcpy(search->surname, surnameof);
+                        if (sortfrontpll(list) == 1)
+                        {
+                            sortfrontpll(list);
+                        }
                         break;
                     case 2: 
                         printf("\nEnter name: ");
@@ -188,38 +272,38 @@ void editfrontpll(person_linked_list *list){//Редактирование че�
                         fgets(nameonf, TWENTY_SIZE, stdin);
                         if (!checkonvoidstr(nameonf))
                         {
-                            printf("Поля фамилия и имя не могут быть пустыми! Возврат в меню\n");
+                            printf("The surname and name fields cannot be empty! Return to the menu\n");
                             break;
                         }
                         strcpy(search->name, nameonf);
                         break;
                     case 3: 
-                        printf("\nВведите отчество: ");
+                        printf("\nEnter midname: ");
                         fgets (clean, 2 ,stdin);
                         fgets(search->lastname, TWENTY_SIZE, stdin);
                         break;
                     case 4: 
-                        printf("\nВведите место работы: ");
+                        printf("\nEnter place of work: ");
                         fgets (clean, 2 ,stdin);
                         fgets(search->infwork.placewp, FIFTY_SIZE, stdin);
                         break;
                     case 5: 
-                        printf("\nВведите должность: ");
+                        printf("\nEnter post: ");
                         fgets (clean, 2 ,stdin);
                         fgets(search->infwork.postp, THIRTY_SIZE, stdin);
                         break;
                     case 6: 
-                        printf("\nВведите номер телефона: ");
+                        printf("\nEnter mobile phone number: ");
                         fgets (clean, 2 ,stdin);
                         fgets(search->infconn.mobphonep, 12, stdin);
                         break;
                     case 7: 
-                        printf("\nВведите email: ");
+                        printf("\nEnter email: ");
                         fgets (clean, 2 ,stdin);
                         fgets( search->infconn.addressemailp, THIRTY_SIZE, stdin);
                         break;
                     case 8: 
-                        printf("\nВведите ссылку на соц.сеть: ");
+                        printf("\nEnter link on sn: ");
                         fgets (clean, 2 ,stdin);
                         fgets( search->infconn.linksnp, 200, stdin);
                         break;
@@ -227,7 +311,7 @@ void editfrontpll(person_linked_list *list){//Редактирование че�
                         workonf=0;
                         break;
                     default: 
-                        printf("\nКоманда не найдена \n");
+                        printf("\nCommand not found \n");
                         break;
                 }
             }
@@ -237,10 +321,6 @@ void editfrontpll(person_linked_list *list){//Редактирование че�
 }
 
 void deletefrontpll(person_linked_list *list){//Удаление через начало списка
-    person_node *tmp = (person_node*) malloc(sizeof(person_node));
-    if (tmp == NULL) {
-        exit(1);
-    }
 
     char clean[2];
     char nameonf[TWENTY_SIZE];
@@ -259,22 +339,35 @@ void deletefrontpll(person_linked_list *list){//Удаление через на
         printf("The surname and name fields cannot be empty! Return to the menu\n");
         return;
     }
-    strcpy(tmp->name, nameonf);
-    strcpy(tmp->surname, surnameof);
 
     person_node *search = list->head;
 
     while (search != NULL) {
-        if (!strcmp(search->name, tmp->name) && !strcmp(search->surname, tmp->surname))
+        if (!strcmp(search->name, nameonf) && !strcmp(search->surname, surnameof))
         {
-            if(search->next != NULL)
+            if (list->size == 1)
+            {
+                list->head = NULL;
+                list->tail = NULL;
+                free(search);
+                list->size--;
+                break;
+            }
+
+            if(search->next != NULL && search != list->head)
             {
                 search->next->prev = search->prev;
                 search->prev->next = search->next;
             }
+            else if (search->next == NULL)
+            {
+                search->prev->next = NULL;
+                list->tail = search->prev;
+            }
             else
             {
-                search->prev->next = search->next;
+                search->next->prev = NULL;
+                list->head = search->next;
             }
             free(search);
             list->size--;

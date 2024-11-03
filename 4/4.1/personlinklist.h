@@ -42,7 +42,9 @@ typedef struct _person_linked_list {
 bool checkonvoidstr(char str[20]);
 person_linked_list* createpll();
 void deletepll(person_linked_list **list);
+int sortfrontpll(person_linked_list *list);
 void pushfrontpll(person_linked_list *list);
-void printpll(person_linked_list *list);
+void printfrontpll(person_linked_list *list);
+void printbackpll(person_linked_list *list);
 void editfrontpll(person_linked_list *list);
 void deletefrontpll(person_linked_list *list);
