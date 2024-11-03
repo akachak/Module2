@@ -38,10 +38,6 @@ int sortfrontpll(person_linked_list *list){//Сортировка через н�
     if (swap == NULL) {
         exit(1);
     }
-    person_node *swap_two = (person_node*) malloc(sizeof(person_node));
-    if (swap == NULL) {
-        exit(1);
-    }
     person_node *last = NULL;
     int swapped;
     do {
