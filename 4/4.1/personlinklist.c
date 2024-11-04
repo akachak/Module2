@@ -139,6 +139,8 @@ void pushfrontpll(person_linked_list *list){//Добавление через н
     if (list->size == 0) {
         list->head = newnode;
         list->tail = newnode;
+        newnode->next = NULL;
+        newnode->prev = NULL;
         list->size++;
         return;
     }
