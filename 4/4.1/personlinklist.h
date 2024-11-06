@@ -21,13 +21,18 @@ struct connectfp
     char linksnp[200];
 };
 
-typedef struct _person_node
+struct person
 {
     char name[TWENTY_SIZE];
     char surname[TWENTY_SIZE];
     char lastname[TWENTY_SIZE];
     struct workp infwork;
     struct connectfp infconn;
+};
+
+typedef struct _person_node
+{
+    struct person pers;
     struct _person_node *next;
     struct _person_node *prev; 
 } person_node;
@@ -39,12 +44,11 @@ typedef struct _person_linked_list {
     person_node *tail;
 } person_linked_list;
 
-bool checkonvoidstr(char str[20]);
 person_linked_list* createpll();
 void deletepll(person_linked_list **list);
 int sortfrontpll(person_linked_list *list);
-void pushfrontpll(person_linked_list *list);
-void printfrontpll(person_linked_list *list);
+void pushfrontpll(person_linked_list *list, person_node *newnode);
+void printfrontpll(person_linked_list *list); 
 void printbackpll(person_linked_list *list);
-void editfrontpll(person_linked_list *list);
-void deletefrontpll(person_linked_list *list);
+void editfrontpll(person_linked_list *list, char nameonf[], char surnameof[], int cmdonf, char newfield[]);
+void deletefrontpll(person_linked_list *list, char nameonf[], char surnameof[]);

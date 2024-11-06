@@ -1,14 +1,5 @@
 #include "personlinklist.h"
 
-bool checkonvoidstr(char str[20]){
-    if (strcmp(str, "\n\0")==0)
-    {
-        return false;
-    }
-    
-    return true;
-}
-
 person_linked_list* createpll(){//Создание пустого экземпляра списка
     person_linked_list *tmp = (person_linked_list*) malloc(sizeof(person_linked_list));
     tmp->size = 0;
@@ -45,7 +36,7 @@ int sortfrontpll(person_linked_list *list){//Сортировка через н�
         curr = list->head;
 
         while (curr->next != last) {
-            if ((toupper(curr->surname[0]) > toupper(curr->next->surname[0]))) {
+            if ((toupper(curr->pers.surname[0]) > toupper(curr->next->pers.surname[0]))) {
                 if(curr->next == list->tail)
                 {
                     swap = list->tail->prev;
@@ -89,51 +80,7 @@ int sortfrontpll(person_linked_list *list){//Сортировка через н�
     return 0;
 }
 
-void pushfrontpll(person_linked_list *list){//Добавление через начало списка по алфавиту
-    person_node *newnode = (person_node*) malloc(sizeof(person_node));
-    if (newnode == NULL) {
-        exit(1);
-    }
-
-    char clean[2];
-    char nameonf[TWENTY_SIZE];
-    char surnameof[TWENTY_SIZE];
-    
-    fgets (clean, 2 ,stdin);
-    
-    printf("\nEnter surname: ");
-    fgets(surnameof, TWENTY_SIZE, stdin);
-    
-    printf("Enter name: ");
-    fgets(nameonf, TWENTY_SIZE, stdin);
-    
-    if (!checkonvoidstr(nameonf) || !checkonvoidstr(surnameof))
-    {
-        printf("The surname and name fields cannot be empty! Return to the menu\n");
-        return;
-    }
-    strcpy(newnode->name, nameonf);
-    strcpy(newnode->surname, surnameof);
-
-    printf("Enter midname or skip(enter): ");
-    fgets(newnode->lastname, TWENTY_SIZE, stdin);
-    
-    printf("Enter place of work or skip(enter): ");
-    fgets(newnode->infwork.placewp, FIFTY_SIZE, stdin);
-    
-    printf("Enter post or skip(enter): ");
-    fgets(newnode->infwork.postp, THIRTY_SIZE, stdin);
-    
-    printf("Enter mobile phone in format 89********* or skip(enter): ");
-    fgets(newnode->infconn.mobphonep, 12, stdin);
-    
-    printf("Enter email or skip(enter): ");
-    fgets( newnode->infconn.addressemailp, THIRTY_SIZE, stdin);
-    
-    printf("Enter link on social network or skip(enter): ");
-    fgets( newnode->infconn.linksnp, 200, stdin);
-
-    
+void pushfrontpll(person_linked_list *list, person_node *newnode){//Добавление через начало списка по алфавиту
     person_node *tmp = list->head;
 
     if (list->size == 0) {
@@ -147,11 +94,11 @@ void pushfrontpll(person_linked_list *list){//Добавление через н
 
     while(true)
     {
-        if( tmp->next != NULL && (toupper(tmp->surname[0]) < toupper(newnode->surname[0])))
+        if( tmp->next != NULL && (toupper(tmp->pers.surname[0]) < toupper(newnode->pers.surname[0])))
         {
             tmp = tmp->next;
         }
-        else if (tmp->next == NULL && (toupper(tmp->surname[0]) < toupper(newnode->surname[0])))
+        else if (tmp->next == NULL && (toupper(tmp->pers.surname[0]) < toupper(newnode->pers.surname[0])))
         {
             tmp->next = newnode;
             newnode->next = NULL;
@@ -187,12 +134,12 @@ void printfrontpll(person_linked_list *list){//Принт с начала спи
     printf("Forward List: ");
     while (tmp != NULL) {
         printf("\n");
-        printf("Full name:\n S: %s N: %s L: %s", tmp->surname, tmp->name, tmp->lastname);
-        printf("Place of work: %s", tmp->infwork.placewp);
-        printf("Post: %s", tmp->infwork.postp);
-        printf("Mobile phone: %s", tmp->infconn.mobphonep);
-        printf("Email: %s", tmp->infconn.addressemailp);
-        printf("Link on sn: %s", tmp->infconn.linksnp);
+        printf("Full name:\n S: %s N: %s L: %s", tmp->pers.surname, tmp->pers.name, tmp->pers.lastname);
+        printf("Place of work: %s", tmp->pers.infwork.placewp);
+        printf("Post: %s", tmp->pers.infwork.postp);
+        printf("Mobile phone: %s", tmp->pers.infconn.mobphonep);
+        printf("Email: %s", tmp->pers.infconn.addressemailp);
+        printf("Link on sn: %s", tmp->pers.infconn.linksnp);
         tmp = tmp->next;
     }
 }
@@ -202,146 +149,62 @@ void printbackpll(person_linked_list *list){//Принт с конца спис�
     printf("Forward List: ");
     while (tmp != NULL) {
         printf("\n");
-        printf("Full name:\n S: %s N: %s L: %s", tmp->surname, tmp->name, tmp->lastname);
-        printf("Place of work: %s", tmp->infwork.placewp);
-        printf("Post: %s", tmp->infwork.postp);
-        printf("Mobile phone: %s", tmp->infconn.mobphonep);
-        printf("Email: %s", tmp->infconn.addressemailp);
-        printf("Link on sn: %s", tmp->infconn.linksnp);
+        printf("Full name:\n S: %s N: %s L: %s", tmp->pers.surname, tmp->pers.name, tmp->pers.lastname);
+        printf("Place of work: %s", tmp->pers.infwork.placewp);
+        printf("Post: %s", tmp->pers.infwork.postp);
+        printf("Mobile phone: %s", tmp->pers.infconn.mobphonep);
+        printf("Email: %s", tmp->pers.infconn.addressemailp);
+        printf("Link on sn: %s", tmp->pers.infconn.linksnp);
         tmp = tmp->prev;
     }
 }
 
-void editfrontpll(person_linked_list *list){//Редактирование через начало списка
-    person_node *tmp = (person_node*) malloc(sizeof(person_node));
-    if (tmp == NULL) {
-        exit(1);
-    }
-
-    char clean[2];
-    char nameonf[TWENTY_SIZE];
-    char surnameof[TWENTY_SIZE];
+void editfrontpll(person_linked_list *list, char nameonf[], char surnameof[], int cmdonf, char newfield[]){//Редактирование через начало списка
     
-    fgets (clean, 2 ,stdin);
-    
-    printf("\nEnter surname for edit: ");
-    fgets(surnameof, TWENTY_SIZE, stdin);
-    
-    printf("Enter name for edit: ");
-    fgets(nameonf, TWENTY_SIZE, stdin);
-    
-    if (!checkonvoidstr(nameonf) || !checkonvoidstr(surnameof))
-    {
-        printf("The surname and name fields cannot be empty! Return to the menu\n");
-        return;
-    }
-    strcpy(tmp->name, nameonf);
-    strcpy(tmp->surname, surnameof);
-
     person_node *search = list->head;
 
     while (search != NULL) {
-        if (!strcmp(search->name, tmp->name) && !strcmp(search->surname, tmp->surname))
+        if (!strcmp(search->pers.name, nameonf) && !strcmp(search->pers.surname, surnameof))
         {
-            bool workonf=1; int cmdonf;
-            while(workonf){
-                printf("\nEdit surname-1,\n Edit name-2,\n Edit midname-3,\n Edit place of work-4,\n Edit post-5,\n Edit mobile phone number-6,\n Edit email-7,\n Edit link on sn-8,\n Exit-9\n: ");
-                scanf("%d", &cmdonf);
-                switch(cmdonf)
-                {
-                    case 1: 
-                        printf("\nEnter surname: ");
-                        fgets (clean, 2 ,stdin);
-                        fgets(surnameof, TWENTY_SIZE, stdin);
-                        if (!checkonvoidstr(surnameof))
-                        {
-                            printf("The surname and name fields cannot be empty! Return to the menu\n");
-                            break;
-                        }
-                        strcpy(search->surname, surnameof);
-                        if (sortfrontpll(list) == 1)
-                        {
-                            sortfrontpll(list);
-                        }
-                        break;
-                    case 2: 
-                        printf("\nEnter name: ");
-                        fgets (clean, 2 ,stdin);
-                        fgets(nameonf, TWENTY_SIZE, stdin);
-                        if (!checkonvoidstr(nameonf))
-                        {
-                            printf("The surname and name fields cannot be empty! Return to the menu\n");
-                            break;
-                        }
-                        strcpy(search->name, nameonf);
-                        break;
-                    case 3: 
-                        printf("\nEnter midname: ");
-                        fgets (clean, 2 ,stdin);
-                        fgets(search->lastname, TWENTY_SIZE, stdin);
-                        break;
-                    case 4: 
-                        printf("\nEnter place of work: ");
-                        fgets (clean, 2 ,stdin);
-                        fgets(search->infwork.placewp, FIFTY_SIZE, stdin);
-                        break;
-                    case 5: 
-                        printf("\nEnter post: ");
-                        fgets (clean, 2 ,stdin);
-                        fgets(search->infwork.postp, THIRTY_SIZE, stdin);
-                        break;
-                    case 6: 
-                        printf("\nEnter mobile phone number: ");
-                        fgets (clean, 2 ,stdin);
-                        fgets(search->infconn.mobphonep, 12, stdin);
-                        break;
-                    case 7: 
-                        printf("\nEnter email: ");
-                        fgets (clean, 2 ,stdin);
-                        fgets( search->infconn.addressemailp, THIRTY_SIZE, stdin);
-                        break;
-                    case 8: 
-                        printf("\nEnter link on sn: ");
-                        fgets (clean, 2 ,stdin);
-                        fgets( search->infconn.linksnp, 200, stdin);
-                        break;
-                    case 9:
-                        workonf=0;
-                        break;
-                    default: 
-                        printf("\nCommand not found \n");
-                        break;
-                }
+            switch(cmdonf)
+            {
+                case 1: 
+                    strcpy(search->pers.surname, newfield);
+                    if (sortfrontpll(list) == 1){sortfrontpll(list);}
+                    break;
+                case 2: 
+                    strcpy(search->pers.name, newfield);
+                    break;
+                case 3: 
+                    strcpy(search->pers.name, newfield);
+                    break;
+                case 4: 
+                    strcpy(search->pers.infwork.placewp, newfield);
+                    break;
+                case 5: 
+                    strcpy(search->pers.infwork.postp, newfield);
+                    break;
+                case 6: 
+                    strcpy(search->pers.infconn.mobphonep, newfield);
+                    break;
+                case 7: 
+                    strcpy(search->pers.infconn.addressemailp, newfield);
+                    break;
+                case 8: 
+                    strcpy(search->pers.infconn.linksnp, newfield);
+                    break;
             }
         }
         search = search->next;
     }
 }
 
-void deletefrontpll(person_linked_list *list){//Удаление через начало списка
-
-    char clean[2];
-    char nameonf[TWENTY_SIZE];
-    char surnameof[TWENTY_SIZE];
-    
-    fgets (clean, 2 ,stdin);
-    
-    printf("\nEnter surname for delete: ");
-    fgets(surnameof, TWENTY_SIZE, stdin);
-    
-    printf("Enter name for delete: ");
-    fgets(nameonf, TWENTY_SIZE, stdin);
-    
-    if (!checkonvoidstr(nameonf) || !checkonvoidstr(surnameof))
-    {
-        printf("The surname and name fields cannot be empty! Return to the menu\n");
-        return;
-    }
+void deletefrontpll(person_linked_list *list, char nameonf[], char surnameof[]){//Удаление через начало списка
 
     person_node *search = list->head;
 
     while (search != NULL) {
-        if (!strcmp(search->name, nameonf) && !strcmp(search->surname, surnameof))
+        if (!strcmp(search->pers.name, nameonf) && !strcmp(search->pers.surname, surnameof))
         {
             if (list->size == 1)
             {
