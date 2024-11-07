@@ -27,6 +27,7 @@ typedef struct _person
     char lastname[TWENTY_SIZE];
     struct workp infwork;
     struct connectfp infconn;
+    int keyfortree;
 }person;
 
 typedef struct _person_node_tree
@@ -35,12 +36,11 @@ typedef struct _person_node_tree
     struct _person_node_tree* left;
     struct _person_node_tree* right;
     struct _person_node_tree* parent;
-
-
-
 }person_node_tree;
 
-bool checkonvoidstr(char str[20]);
-person createPerson();
+typedef struct _person_tree{
+    person_node_tree *root;
+}person_tree;
+
 person_node_tree* createNode();
 person_node_tree* insertNode();
