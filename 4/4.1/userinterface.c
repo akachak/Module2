@@ -44,12 +44,10 @@ person_node* createperson(){
         exit(1);
     }
     struct person fpers = enternamesurname();
-    char clean[2];
  
     strcpy(newnode->pers.surname, fpers.surname);
     strcpy(newnode->pers.name, fpers.name);
     
-    fgets (clean, 2 ,stdin);
     printf("Enter midname or skip(enter): ");
     fgets(newnode->pers.lastname, TWENTY_SIZE, stdin);
     
@@ -97,6 +95,7 @@ void editperson(person_linked_list *list){
                             break;
                         }
                         editfrontpll(list, fpers.name, fpers.surname, cmdonf, twenty);
+                        workonf=0;
                         break;
                     case 2: 
                         printf("\nEnter name: ");
@@ -108,6 +107,7 @@ void editperson(person_linked_list *list){
                             break;
                         }
                         editfrontpll(list, fpers.name, fpers.surname, cmdonf, twenty);
+                        workonf=0;
                         break;
                     case 3: 
                         printf("\nEnter midname: ");
@@ -162,6 +162,36 @@ void deleteperson(person_linked_list *list){
 
 void pushperson(person_linked_list *list){
     pushfrontpll(list, createperson());
+}
+
+void printfrontpll(person_linked_list *list){//Принт с начала списка
+    person_node *tmp = list->head;
+    printf("Forward List: ");
+    while (tmp != NULL) {
+        printf("\n");
+        printf("Full name:\n S: %s N: %s L: %s", tmp->pers.surname, tmp->pers.name, tmp->pers.lastname);
+        printf("Place of work: %s", tmp->pers.infwork.placewp);
+        printf("Post: %s", tmp->pers.infwork.postp);
+        printf("Mobile phone: %s", tmp->pers.infconn.mobphonep);
+        printf("Email: %s", tmp->pers.infconn.addressemailp);
+        printf("Link on sn: %s", tmp->pers.infconn.linksnp);
+        tmp = tmp->next;
+    }
+}
+
+void printbackpll(person_linked_list *list){//Принт с конца списка
+    person_node *tmp = list->tail;
+    printf("Forward List: ");
+    while (tmp != NULL) {
+        printf("\n");
+        printf("Full name:\n S: %s N: %s L: %s", tmp->pers.surname, tmp->pers.name, tmp->pers.lastname);
+        printf("Place of work: %s", tmp->pers.infwork.placewp);
+        printf("Post: %s", tmp->pers.infwork.postp);
+        printf("Mobile phone: %s", tmp->pers.infconn.mobphonep);
+        printf("Email: %s", tmp->pers.infconn.addressemailp);
+        printf("Link on sn: %s", tmp->pers.infconn.linksnp);
+        tmp = tmp->prev;
+    }
 }
 
 void printpersons(person_linked_list *list){

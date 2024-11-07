@@ -20,24 +20,27 @@ struct connectfp
     char linksnp[200];
 };
 
-struct person
+typedef struct _person
 {
     char name[TWENTY_SIZE];
     char surname[TWENTY_SIZE];
     char lastname[TWENTY_SIZE];
     struct workp infwork;
     struct connectfp infconn;
-};
+}person;
 
 typedef struct _person_node_tree
 {
-    struct person pn;
+    person pn;
     struct _person_node_tree* left;
     struct _person_node_tree* right;
+    struct _person_node_tree* parent;
+
+
 
 }person_node_tree;
 
 bool checkonvoidstr(char str[20]);
-struct person createPerson();
+person createPerson();
 person_node_tree* createNode();
 person_node_tree* insertNode();

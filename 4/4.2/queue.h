@@ -22,15 +22,11 @@ typedef struct _task_linked_list {
     task_node *tail;
 } task_linked_list;
 
-int enterprior();
-struct task createtask(int *cgr);
-struct task createrandomtask(int *cgr);
+
 task_linked_list* createtll();
 void deletetll(task_linked_list **list);
-void pushbacktll(task_linked_list *list,  bool checkrandom, int *cgr, int *count_r);
-void printfronttll(task_linked_list *list);
-int getprintfronttll(task_linked_list *list, bool checkcmd, int prior);
-bool checkbyid(task_linked_list *list, int checkid);
-struct task gettaskbyid (task_linked_list *list, int getid);
+void pushbacktll(task_linked_list *list, struct task newtask);
 void deletetaskbyid(task_linked_list *list, int delid);
-struct task getfronttll(task_linked_list *list);
+struct task getfrontfirst(task_linked_list *list);
+struct task getfrontbypr(task_linked_list *list, int prior);
+struct task getfrontnothigh(task_linked_list *list, int prior);

@@ -129,36 +129,6 @@ void pushfrontpll(person_linked_list *list, person_node *newnode){//Добавл
     list->size++;
 }
 
-void printfrontpll(person_linked_list *list){//Принт с начала списка
-    person_node *tmp = list->head;
-    printf("Forward List: ");
-    while (tmp != NULL) {
-        printf("\n");
-        printf("Full name:\n S: %s N: %s L: %s", tmp->pers.surname, tmp->pers.name, tmp->pers.lastname);
-        printf("Place of work: %s", tmp->pers.infwork.placewp);
-        printf("Post: %s", tmp->pers.infwork.postp);
-        printf("Mobile phone: %s", tmp->pers.infconn.mobphonep);
-        printf("Email: %s", tmp->pers.infconn.addressemailp);
-        printf("Link on sn: %s", tmp->pers.infconn.linksnp);
-        tmp = tmp->next;
-    }
-}
-
-void printbackpll(person_linked_list *list){//Принт с конца списка
-    person_node *tmp = list->tail;
-    printf("Forward List: ");
-    while (tmp != NULL) {
-        printf("\n");
-        printf("Full name:\n S: %s N: %s L: %s", tmp->pers.surname, tmp->pers.name, tmp->pers.lastname);
-        printf("Place of work: %s", tmp->pers.infwork.placewp);
-        printf("Post: %s", tmp->pers.infwork.postp);
-        printf("Mobile phone: %s", tmp->pers.infconn.mobphonep);
-        printf("Email: %s", tmp->pers.infconn.addressemailp);
-        printf("Link on sn: %s", tmp->pers.infconn.linksnp);
-        tmp = tmp->prev;
-    }
-}
-
 void editfrontpll(person_linked_list *list, char nameonf[], char surnameof[], int cmdonf, char newfield[]){//Редактирование через начало списка
     
     person_node *search = list->head;

@@ -11,4 +11,6 @@ struct person enternamesurname();
 void editperson(person_linked_list *list);
 void deleteperson(person_linked_list *list);
 void pushperson(person_linked_list *list);
+void printfrontpll(person_linked_list *list); 
+void printbackpll(person_linked_list *list);
 void printpersons(person_linked_list *list);

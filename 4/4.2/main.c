@@ -1,4 +1,4 @@
-#include "queue.h"
+#include "userinterface.h"
 
 int main(){
     srand(time(NULL));
@@ -7,7 +7,7 @@ int main(){
     struct task gettask;
 
     int gen_id=1;
-    int count_r; int nulll = 0;
+    int count_r;
     bool work=1; int cmd; 
     while(work){
         printf("\nPrint list-1, Add task-2, Get task-3, Random generate task-4, Complete the work-5: ");
@@ -17,11 +17,11 @@ int main(){
             case 1: 
                 printfronttll(list);             
                 break;
-            case 2: 
-                pushbacktll(list, false, &gen_id, &nulll);
+            case 2:
+                createtask(list, &gen_id);
                 break;
             case 3: 
-                gettask = getfronttll(list);
+                gettask = getfrontchoose(list);
                 printf("\n***Getting task\n--------------------------------------------------]\n");
                 printf("Inf:\n Id: %d \n Priority: %d ", gettask.id, gettask.priority);
                 printf("\nMsg: %s", gettask.msg);
@@ -32,7 +32,7 @@ int main(){
                 scanf("%d", &count_r);
                 if(count_r > 0)
                 {
-                    pushbacktll(list, true, &gen_id, &count_r);
+                    createrandomtask(list, &gen_id, count_r);
                 }
                 else{printf("\nError: need count > 0");}
                 break;

@@ -9,11 +9,11 @@ bool checkonvoidstr(char str[20]){
     return true;
 }
 
-struct person createPerson(){
+person createPerson(){
     char clean[2];
     char nameonf[TWENTY_SIZE];
     char surnameof[TWENTY_SIZE];
-    struct person tmp;
+    person tmp;
     bool workonf = 1;
 
     fgets (clean, 2 ,stdin);

@@ -48,7 +48,5 @@ person_linked_list* createpll();
 void deletepll(person_linked_list **list);
 int sortfrontpll(person_linked_list *list);
 void pushfrontpll(person_linked_list *list, person_node *newnode);
-void printfrontpll(person_linked_list *list); 
-void printbackpll(person_linked_list *list);
 void editfrontpll(person_linked_list *list, char nameonf[], char surnameof[], int cmdonf, char newfield[]);
 void deletefrontpll(person_linked_list *list, char nameonf[], char surnameof[]);
