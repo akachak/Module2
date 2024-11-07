@@ -1,7 +1,7 @@
-listpers: main.o personlinklist.o userinterface.o
+listpers: main.o userinterface.o personlinklist.o 
 	gcc -o listpers main.o personlinklist.o userinterface.o
 
-main.o: main.c personlinklist.h userinterface.h
+main.o: main.c userinterface.h 
 	gcc -c main.c
 
 userinterface.o: userinterface.c userinterface.h personlinklist.h
@@ -9,5 +9,3 @@ userinterface.o: userinterface.c userinterface.h personlinklist.h
 
 personlinklist.o: personlinklist.c personlinklist.h
 	gcc -c personlinklist.c
-
-#//No work

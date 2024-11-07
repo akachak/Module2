@@ -9,7 +9,8 @@ bool checkonvoidstr(char str[20]){
     return true;
 }
 
-char** enternamesurname(){
+struct person enternamesurname(){
+    struct person fpers;
     char clean[2];
     char nameonf[TWENTY_SIZE];
     char surnameof[TWENTY_SIZE];
@@ -29,9 +30,10 @@ char** enternamesurname(){
         }
         else{break;}
     }
+    strcpy(fpers.name, nameonf);
+    strcpy(fpers.surname, surnameof);
     
-    char *arr[] = {surnameof, nameonf};
-    return arr;
+    return fpers;
 
 }
 
@@ -41,11 +43,11 @@ person_node* createperson(){
     if (newnode == NULL) {
         exit(1);
     }
-    char *arrns[] = enternamesurname();
+    struct person fpers = enternamesurname();
     char clean[2];
  
-    strcpy(newnode->pers.surname, arrns[0]);
-    strcpy(newnode->pers.name, arrns[1]);
+    strcpy(newnode->pers.surname, fpers.surname);
+    strcpy(newnode->pers.name, fpers.name);
     
     fgets (clean, 2 ,stdin);
     printf("Enter midname or skip(enter): ");
@@ -78,7 +80,7 @@ void editperson(person_linked_list *list){
     char twenteen[12];
     char twohund[200];
 
-    char *arrns[] = enternamesurname();
+    struct person fpers = enternamesurname();
 
             while(workonf){
                 printf("\nEdit surname-1,\n Edit name-2,\n Edit midname-3,\n Edit place of work-4,\n Edit post-5,\n Edit mobile phone number-6,\n Edit email-7,\n Edit link on sn-8,\n Exit-9\n: ");
@@ -94,7 +96,7 @@ void editperson(person_linked_list *list){
                             printf("The surname and name fields cannot be empty! Return to the menu\n");
                             break;
                         }
-                        editfrontpll(list, arrns[1], arrns[0], cmdonf, twenty);
+                        editfrontpll(list, fpers.name, fpers.surname, cmdonf, twenty);
                         break;
                     case 2: 
                         printf("\nEnter name: ");
@@ -105,43 +107,43 @@ void editperson(person_linked_list *list){
                             printf("The surname and name fields cannot be empty! Return to the menu\n");
                             break;
                         }
-                        editfrontpll(list, arrns[1], arrns[0], cmdonf, twenty);
+                        editfrontpll(list, fpers.name, fpers.surname, cmdonf, twenty);
                         break;
                     case 3: 
                         printf("\nEnter midname: ");
                         fgets (clean, 2 ,stdin);
                         fgets(twenty, TWENTY_SIZE, stdin);
-                        editfrontpll(list, arrns[1], arrns[0], cmdonf, twenty);
+                        editfrontpll(list, fpers.name, fpers.surname, cmdonf, twenty);
                         break;
                     case 4: 
                         printf("\nEnter place of work: ");
                         fgets (clean, 2 ,stdin);
                         fgets(fifgty, FIFTY_SIZE, stdin);
-                        editfrontpll(list, arrns[1], arrns[0], cmdonf, fifgty);
+                        editfrontpll(list, fpers.name, fpers.surname, cmdonf, fifgty);
                         break;
                     case 5: 
                         printf("\nEnter post: ");
                         fgets (clean, 2 ,stdin);
                         fgets(thirty, THIRTY_SIZE, stdin);
-                        editfrontpll(list, arrns[1], arrns[0], cmdonf, thirty);
+                        editfrontpll(list, fpers.name, fpers.surname, cmdonf, thirty);
                         break;
                     case 6: 
                         printf("\nEnter mobile phone number: ");
                         fgets (clean, 2 ,stdin);
                         fgets(twenteen, 12, stdin);
-                        editfrontpll(list, arrns[1], arrns[0], cmdonf, twenteen);
+                        editfrontpll(list, fpers.name, fpers.surname, cmdonf, twenteen);
                         break;
                     case 7: 
                         printf("\nEnter email: ");
                         fgets (clean, 2 ,stdin);
                         fgets(thirty, THIRTY_SIZE, stdin);
-                        editfrontpll(list, arrns[1], arrns[0], cmdonf, thirty);
+                        editfrontpll(list, fpers.name, fpers.surname, cmdonf, thirty);
                         break;
                     case 8: 
                         printf("\nEnter link on sn: ");
                         fgets (clean, 2 ,stdin);
                         fgets(twohund, 200, stdin);
-                        editfrontpll(list, arrns[1], arrns[0], cmdonf, twohund);
+                        editfrontpll(list, fpers.name, fpers.surname, cmdonf, twohund);
                         break;
                     case 9:
                         workonf=0;
@@ -154,11 +156,11 @@ void editperson(person_linked_list *list){
 }
 
 void deleteperson(person_linked_list *list){
-    char *arrns[] = enternamesurname();
-    deletefrontpll(list, arrns[1], arrns[0]);
+    struct person fpers = enternamesurname();
+    deletefrontpll(list, fpers.name, fpers.surname);
 }
 
-void peshperson(person_linked_list *list){
+void pushperson(person_linked_list *list){
     pushfrontpll(list, createperson());
 }
 

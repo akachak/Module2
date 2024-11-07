@@ -7,8 +7,8 @@
 
 bool checkonvoidstr(char str[20]);
 person_node* createperson();
-char** enternamesurname();
+struct person enternamesurname();
 void editperson(person_linked_list *list);
 void deleteperson(person_linked_list *list);
-void peshperson(person_linked_list *list);
+void pushperson(person_linked_list *list);
 void printpersons(person_linked_list *list);
