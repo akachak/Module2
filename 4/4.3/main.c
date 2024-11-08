@@ -1,23 +1,38 @@
 #include "userinterface.h"
 
 int main(){
-    printf("0\n"); int count = 0;
+    int count = 0;
     person_tree* treelist = (person_tree*)malloc(sizeof(person_tree));
-    printf("1\n");
-    initTree(treelist); printf("1.5\n");person tmp;
-    printf("2\n");
-    tmp = createPerson(&count);
-    printf("3\n");
-    treelist->root = insertNode(treelist->root, tmp);
-    printf("4\n");
-    tmp = createPerson(&count);
-    treelist->root = insertNode(treelist->root, tmp);
-    tmp = createPerson(&count);
-    treelist->root = insertNode(treelist->root, tmp);
-    tmp = createPerson(&count);
-    treelist->root = insertNode(treelist->root, tmp);
-    tmp = createPerson(&count);
-    treelist->root = insertNode(treelist->root, tmp);
-    bt_in_order_print(treelist);
+    initTree(treelist);person tmp;
+
+    bool work=1; int cmd;
+    while(work){
+        printf("\nPrint list-1, Add person-2, Edit person-3, Delete person-4, Complete the work-5: ");
+        scanf("%d", &cmd);
+        switch(cmd)
+        {
+            case 1: 
+                print_in_order(treelist->root);      
+                break;
+            case 2:
+                tmp = createPerson(&count);
+                treelist->root = insertNode(treelist->root, tmp);
+                break;
+            case 3: 
+                editperson(treelist, &count);
+                break;
+            case 4: 
+                deleteperson(treelist, &count);
+                break;
+            case 5:
+                work=0;
+                break;
+            default: 
+                printf("\nCommand not found \n");
+                break;
+        }
+    }
+    
     destroyTree(treelist->root);
+    return 0;
 }

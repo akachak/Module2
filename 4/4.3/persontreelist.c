@@ -5,14 +5,6 @@ void initTree(person_tree *newtree)
   newtree->root = NULL;
 }
 
-person_node_tree* createNode(person npn){
-    person_node_tree* newNode = (person_node_tree*)malloc(sizeof(person_node_tree));
-    newNode->pn = npn;
-    newNode->left = NULL;
-    newNode->right = NULL;
-    return newNode;
-}
-
 person_node_tree *insertNode(person_node_tree *newnode, person pers)
 {
   if(newnode == NULL)
@@ -43,7 +35,7 @@ person_node_tree *insertNode(person_node_tree *newnode, person pers)
   }
   return newnode;
 }
-//------------------------------------------------------------------------------
+
 person_node_tree* balanceTree(person_node_tree *temp)
 {
   int bal_factor = diff(temp);
@@ -63,7 +55,7 @@ person_node_tree* balanceTree(person_node_tree *temp)
   }
   return temp;
 }
-//------------------------------------------------------------------------------
+
 person *searchNode(person_node_tree *searchnode, int *key)
 {
   if( searchnode != NULL )
@@ -79,7 +71,7 @@ person *searchNode(person_node_tree *searchnode, int *key)
   }
   return NULL;
 }
-//------------------------------------------------------------------------------
+
 void destroyTree(person_node_tree *node)
 {
   if( node != NULL )
@@ -89,7 +81,7 @@ void destroyTree(person_node_tree *node)
       free( node );
   }
 }
-//------------------------------------------------------------------------------
+
 char height(person_node_tree *node)
 {
   int h = 0;
@@ -103,7 +95,7 @@ char height(person_node_tree *node)
   }
   return h;
 }
-//------------------------------------------------------------------------------
+
 char diff(person_node_tree *node)
 {
   int l_height = height(node->left);
@@ -111,7 +103,7 @@ char diff(person_node_tree *node)
   int b_factor = l_height - r_height;
   return b_factor;
 }
-//------------------------------------------------------------------------------
+
 person_node_tree* ll_rotation(person_node_tree *node)
 {
   person_node_tree *temp;
@@ -120,7 +112,7 @@ person_node_tree* ll_rotation(person_node_tree *node)
   temp->right = node;
   return temp;
 }
-//------------------------------------------------------------------------------
+
 person_node_tree* rr_rotation(person_node_tree *node)
 {
   person_node_tree *temp;
@@ -129,7 +121,7 @@ person_node_tree* rr_rotation(person_node_tree *node)
   temp->left = node;
   return temp;
 }
-//------------------------------------------------------------------------------
+
 person_node_tree* lr_rotation(person_node_tree *node)
 {
   person_node_tree *temp;
@@ -137,7 +129,7 @@ person_node_tree* lr_rotation(person_node_tree *node)
   node->left = rr_rotation(temp);
   return ll_rotation(node);
 }
-//------------------------------------------------------------------------------
+
 person_node_tree* rl_rotation(person_node_tree *node)
 {
   person_node_tree *temp;
@@ -145,26 +137,41 @@ person_node_tree* rl_rotation(person_node_tree *node)
   node->right = ll_rotation(temp);
   return rr_rotation(node);
 }
-//------------------------------------------------------------------------------
-void pi_print_in_order(person_node_tree *node)
-{
-  if(node != NULL)
-  {
-    pi_print_in_order(node->left);
-    printf("%d, ",node->pn.keyfortree);
-        printf("Full name:\n S: %s N: %s L: %s", node->pn.surname, node->pn.name, node->pn.lastname);
-        printf("Place of work: %s", node->pn.infwork.placewp);
-        printf("Post: %s", node->pn.infwork.postp);
-        printf("Mobile phone: %s", node->pn.infconn.mobphonep);
-        printf("Email: %s", node->pn.infconn.addressemailp);
-        printf("Link on sn: %s", node->pn.infconn.linksnp);
-        printf("\n");
-    pi_print_in_order(node->right);
-  }
-}
 
-void bt_in_order_print(person_tree *apTree)
-{
-  pi_print_in_order(apTree->root);
-  printf("\n");
+person_node_tree* deleteNode(person_node_tree* node, int key){
+    if(node == NULL)
+        return node;
+ 
+    if(key == node->pn.keyfortree){
+ 
+        person_node_tree* tmp;
+        if(node->right == NULL)
+            tmp = node->left;
+        else {
+ 
+            person_node_tree* ptr = node->right;
+            if(ptr->left == NULL){
+                ptr->left = node->left;
+                tmp = ptr;
+            } else {
+ 
+                person_node_tree* pmin = ptr->left;
+                while(pmin->left != NULL){
+                    ptr  = pmin;
+                    pmin = ptr->left;
+                }
+                ptr->left   = pmin->right;
+                pmin->left  = node->left;
+                pmin->right = node->right;
+                tmp = pmin;
+            }
+        }
+ 
+        free(node);
+        return tmp;
+    } else if(key < node->pn.keyfortree)
+        node->left  = deleteNode(node->left, key);
+    else
+        node->right = deleteNode(node->right, key);
+    return node;
 }
